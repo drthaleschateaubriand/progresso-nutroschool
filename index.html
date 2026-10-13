@@ -257,7 +257,7 @@ async function push(){dirty=true;saveLocal();setSync('','Salvando…');
 const save=()=>{pushing=push()};
 async function pull(){if(dirty)return push();setSync('','Sincronizando…');
  try{const r=await fetch(SB+'/rest/v1/nutroten_progress?select=done&id=eq.'+TOKEN,{headers:H,cache:'no-store'});if(!r.ok)throw 0;
-  const j=await r.json();if(j.length){done=new Set(Object.keys(j[0].done||{}).filter(k=>j[0].done[k]&&all.some(a=>a.id===k)));saveLocal();render()}
+  const j=await r.json();if(dirty)return push();if(j.length){done=new Set(Object.keys(j[0].done||{}).filter(k=>j[0].done[k]&&all.some(a=>a.id===k)));saveLocal();render()}
   else if(done.size){return push()}setSync('ok','✓ Sincronizado')}catch(e){setSync('off','Offline')}}
 document.addEventListener('visibilitychange',()=>{if(!document.hidden)pull()});addEventListener('focus',pull);addEventListener('online',pull);addEventListener('pageshow',e=>{if(e.persisted)pull()});
 const hms=s=>{s=Math.round(s);const h=Math.floor(s/3600),m=Math.round(s%3600/60);return h?`${h}h${String(m).padStart(2,'0')}`:`${m} min`};
