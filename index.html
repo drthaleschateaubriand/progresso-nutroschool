@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="pt-BR"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="default"><meta name="apple-mobile-web-app-title" content="NUTRO-TEN"><meta name="theme-color" content="#14a37f">
+<title>Progresso NUTRO-TEN · Nutroschool</title>
+<style>
+:root{--bg:#f4f6f8;--card:#fff;--ink:#1d2733;--mute:#6b7785;--acc:#14a37f;--rest:#e3e8ee;--line:#e6eaef}
+@media (prefers-color-scheme:dark){:root{--bg:#11161c;--card:#1a222b;--ink:#e8edf2;--mute:#94a1af;--rest:#2b3540;--line:#26303a}}
+*{box-sizing:border-box}body{margin:0;font:15px/1.45 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;background:var(--bg);color:var(--ink);padding:env(safe-area-inset-top) 0 40px}
+.wrap{max-width:1000px;margin:auto;padding:16px}
+h1{font-size:22px;margin:8px 0 2px}.sub{color:var(--mute);font-size:13px;margin-bottom:14px}
+.card{background:var(--card);border-radius:16px;padding:16px;box-shadow:0 1px 3px rgba(0,0,0,.06);margin-bottom:14px}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px}
+.stat b{display:block;font-size:24px}.stat span{color:var(--mute);font-size:12px}
+.charts{display:grid;grid-template-columns:1fr 1fr;gap:14px}@media(max-width:640px){.charts{grid-template-columns:1fr}}
+.charts h3{margin:0 0 8px;font-size:15px}.chart{display:flex;gap:14px;align-items:center;flex-wrap:wrap}
+.legend{font-size:12px;flex:1;min-width:140px}.legend div{display:flex;gap:6px;align-items:center;margin:2px 0}.sw{width:10px;height:10px;border-radius:3px;flex:none}
+.btns{display:flex;gap:8px;flex-wrap:wrap}button,.btnl{border:1px solid var(--line);background:var(--card);color:var(--ink);padding:9px 14px;border-radius:10px;font:inherit;cursor:pointer}
+button.danger{color:#d0453a}
+details.mod{background:var(--card);border-radius:16px;margin-bottom:10px;box-shadow:0 1px 3px rgba(0,0,0,.06);overflow:hidden}
+summary{list-style:none;padding:14px 16px;cursor:pointer}summary::-webkit-details-marker{display:none}
+.mh{display:flex;justify-content:space-between;gap:8px;font-weight:600}.mh small{color:var(--mute);font-weight:400}
+.bar{height:8px;background:var(--rest);border-radius:6px;margin-top:8px;overflow:hidden}.bar i{display:block;height:100%;border-radius:6px;transition:width .3s}
+ul{list-style:none;margin:0;padding:0 8px 10px}li label{display:flex;gap:12px;align-items:center;padding:10px 8px;border-top:1px solid var(--line);cursor:pointer}
+li input{width:22px;height:22px;accent-color:var(--acc);flex:none}li .t{flex:1}li .w{color:var(--mute);font-size:12px;white-space:nowrap}
+li.done .t{color:var(--mute);text-decoration:line-through}.est{font-size:11px;background:#fff3cd;color:#8a6d00;border-radius:6px;padding:1px 6px;margin-left:6px}
+.sync{font-size:12px;font-weight:500;vertical-align:middle;padding:3px 9px;border-radius:20px;background:var(--rest);color:var(--mute)}.sync.ok{background:#d6f5ea;color:#0b7a5c}.sync.off{background:#fde2e0;color:#b3362b}
+.note{font-size:12px;color:var(--mute)}
+</style></head><body><div class="wrap">
+<h1>NUTRO-TEN · Meu progresso <span id="sync" class="sync">…</span></h1><div class="sub" id="sub"></div>
+<div class="card stats" id="stats"></div>
+<div class="charts"><div class="card"><h3>Geral</h3><div class="chart"><svg id="c1" width="170" height="170" viewBox="0 0 170 170"></svg><div class="legend" id="l1"></div></div></div>
+<div class="card"><h3>Assistido por módulo</h3><div class="chart"><svg id="c2" width="170" height="170" viewBox="0 0 170 170"></svg><div class="legend" id="l2"></div></div></div></div>
+<div class="card btns"><button id="exp">⬇︎ Exportar</button><label class="btnl">⬆︎ Importar<input type="file" id="imp" accept="application/json,.json" hidden></label><button id="all">Expandir/recolher</button><button class="danger" id="zero">Zerar</button></div>
+<div id="list"></div>
+<p class="note" id="foot"></p>
+</div>
+<script id="data" type="application/json">
+{
+"fonte": "igual",
+"geradoEm": "2026-10-13",
+"modulos": [
+[
+"Introdução",
+"introducao",
+[
+[
+"Aula introdução",
+null,
+null,
+true
+]
+]
+],
+[
+"Fundamentos da Nutrição",
+"fundamentos",
+[
+"01 · Macronutrientes: leis da alimentação, DRIs, carboidratos e fibras",
+"02 · Macronutrientes: proteínas e lipídeos",
+"03 · Vitaminas lipossolúveis",
+"04 · Vitaminas hidrossolúveis – parte 1",
+"05 · Vitaminas hidrossolúveis – parte 2",
+"06 · Vitaminas hidrossolúveis – parte 3",
+"07 · Biodisponibilidade de vitaminas",
+"08 · Minerais"
+]
+],
+[
+"Nutrologia Clínica A",
+"clinica-a",
+[
+"01 · Avaliação nutrológica – parte 1",
+"02 · Avaliação nutrológica – parte 2",
+"03 · Calorimetria – parte 1",
+"04 · Calorimetria – parte 2",
+"05 · Nutrologia no idoso",
+"06 · Desnutrição",
+"07 · Sarcopenia",
+"08 · Anemia ferropriva",
+"09 · Anemia megaloblástica"
+]
+],
+[
+"Obesidade",
+"obesidade",
+[
+"01 · Etiologia e fisiopatologia – parte 1",
+"02 · Etiologia e fisiopatologia – parte 2",
+"03 · Estratégias alimentares",
+"04 · Tratamento farmacológico on-label – parte 1",
+"05 · Tratamento farmacológico on-label – parte 2",
+"06 · Tratamento farmacológico on-label – parte 3",
+"07 · Tratamento farmacológico off-label",
+"08 · Tratamento cirúrgico – parte 1",
+"09 · Tratamento cirúrgico – parte 2"
+]
+],
+[
+"Micronutrientes",
+"micronutrientes",
+[
+"01 · Cobre",
+"02 · Ferro",
+"03 · Zinco",
+"04 · Selênio",
+"05 · Tiamina",
+"06 · Vitaminas B3 e B5",
+"07 · Ácido fólico (B9) e B12",
+"08 · Vitamina D"
+]
+],
+[
+"Nutrição Enteral",
+"enteral",
+[
+"01 · Conceitos, indicação, via de acesso, vantagens e desvantagens",
+"02 · Tipo de dieta: como escolher a melhor dieta enteral",
+"03 · Complicações da nutrição enteral"
+]
+],
+[
+"Nutrição Parenteral",
+"parenteral",
+[
+"01 · Indicação, tipos de dietas, vias de acesso",
+"02 · Prescrevendo nutrição parenteral na prática",
+"03 · Complicações da nutrição parenteral"
+]
+],
+[
+"Nutrição Clínica B",
+"clinica-b",
+[
+"01 · Paciente crítico",
+"02 · Doença hepática gordurosa metabólica (DHGM)",
+"03 · Doença renal",
+"04 · Lipedema",
+"05 · MOSH – parte 1",
+"06 · MOSH – parte 2",
+"07 · MOSH – parte 3",
+"08 · Transtornos alimentares – parte 1",
+"09 · Transtornos alimentares – parte 2"
+]
+],
+[
+"Diabetes Mellitus",
+"diabetes",
+[
+"01 · Entendendo os mecanismos por trás do diabetes (fisiopatologia)",
+"02 · Rastreamento e diagnóstico",
+"03 · Classificação do diabetes",
+"04 · Metas no tratamento e terapia nutricional",
+"05 · Tratamento farmacológico do diabetes"
+]
+],
+[
+"Nutrologia Pediátrica",
+"pediatrica",
+[
+"01 · Doença celíaca",
+"02 · Intolerância à lactose",
+"03 · Obesidade infantil – parte 1",
+"04 · Obesidade infantil – parte 2"
+]
+],
+[
+"Nutrologia Esportiva",
+"esportiva",
+[
+"01 · Fonte de energia durante o exercício físico",
+"02 · Carboidrato como fonte de energia durante o exercício",
+"03 · Proteínas no esporte",
+"04 · Lipídios no esporte",
+"05 · Suplementação no esporte",
+"06 · Recomendação energética no esporte",
+"07 · Hidratação no esporte"
+]
+],
+[
+"Gestação",
+"gestacao",
+[
+"01 · Nutrologia na gestação – parte 1",
+"02 · Nutrologia na gestação – parte 2"
+]
+],
+[
+"Saúde Gastrointestinal",
+"gastro",
+[
+"01 · Microbiota intestinal – parte 1",
+"02 · Microbiota intestinal – parte 2",
+"03 · Prebióticos",
+"04 · Probióticos",
+"05 · Síndrome do intestino irritável – parte 1",
+"06 · Síndrome do intestino irritável – parte 2",
+"07 · Falência intestinal",
+"08 · Síndrome do intestino curto – parte 1",
+"09 · Síndrome do intestino curto – parte 2",
+"10 · Conduta nutrológica na pancreatite aguda",
+"11 · Doença inflamatória intestinal"
+]
+],
+[
+"Dislipidemia",
+"dislipidemia",
+[
+"01 · Entendendo a fisiologia das dislipidemias – parte 1",
+"02 · Entendendo a fisiologia das dislipidemias – parte 2",
+"03 · Avaliação do perfil lipídico",
+"04 · Estratificação de risco – parte 1",
+"05 · Estratificação de risco – parte 2",
+"06 · Tratamento – parte 1",
+"07 · Tratamento – parte 2"
+]
+],
+[
+"Atualizações",
+"atualizacoes",
+[
+[
+"SOMP",
+null,
+null,
+true
+]
+]
+]
+]
+}
+</script>
+<script>
+/* Módulo: [nome, chave, aulas]. ID da aula = chave-NN (estável; não depende do título). Formato de aula: "título" ou [título, duraçãoSegundos|null, bytes|null, estimado?]. fonte: "duracao" | "tamanho" | "igual" */
+const D=JSON.parse(document.getElementById('data').textContent);
+const KEY='nutroten-progresso-v1';
+const COLORS=['#14a37f','#3b82f6','#f59e0b','#ef4444','#8b5cf6','#06b6d4','#ec4899','#84cc16','#f97316','#6366f1','#a16207','#e11d48','#0ea5e9','#a855f7','#eab308'];
+const slug=s=>s.normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'');
+const mods=D.modulos.map(([nome,key,aulas],mi)=>({nome,cor:COLORS[mi%COLORS.length],aulas:aulas.map((a,ai)=>{const[t,dur,by,est]=Array.isArray(a)?a:[a];return{id:key+'-'+String(ai+1).padStart(2,'0'),t,dur,by,est:!!est}})}));
+const all=mods.flatMap(m=>m.aulas);
+const useDur=all.some(a=>a.dur), useBy=!useDur&&all.some(a=>a.by);
+const raw=a=>useDur?a.dur:useBy?a.by:1;
+const known=all.map(raw).filter(x=>x).sort((a,b)=>a-b);
+const med=known.length?(known.length%2?known[known.length>>1]:(known[known.length/2-1]+known[known.length/2])/2):1;
+all.forEach(a=>{a.w=raw(a)||med;if(!raw(a)&&(useDur||useBy))a.est=true;if(!useDur&&!useBy)a.est=a.est});
+let done=new Set();try{done=new Set(JSON.parse(localStorage.getItem(KEY)||'[]'))}catch(e){}
+const SB='https://jktqibawumjqwgaqjgom.supabase.co',SBK='sb_publishable_M3TjrzFtolcgH1Sjlacj3A_U-NZssPC',TOKEN='9a5ca3c5-3440-48e8-bc91-64f866fe04d5';
+const H={apikey:SBK,'Content-Type':'application/json'};
+const setSync=(c,t)=>{const e=document.getElementById('sync');e.className='sync '+c;e.textContent=t};
+const saveLocal=()=>{try{localStorage.setItem(KEY,JSON.stringify([...done]));localStorage.setItem(KEY+'-dirty',dirty?'1':'')}catch(e){}};
+let dirty=false;try{dirty=!!localStorage.getItem(KEY+'-dirty')}catch(e){}
+let pushing=null;
+async function push(){dirty=true;saveLocal();setSync('','Salvando…');
+ const body=JSON.stringify({id:TOKEN,done:Object.fromEntries([...done].map(i=>[i,true])),updated_at:new Date().toISOString()});
+ try{const r=await fetch(SB+'/rest/v1/nutroten_progress?on_conflict=id',{method:'POST',headers:{...H,Prefer:'resolution=merge-duplicates,return=minimal'},body});
+  if(!r.ok)throw 0;dirty=false;saveLocal();setSync('ok','✓ Sincronizado')}catch(e){setSync('off','Offline')}}
+const save=()=>{pushing=push()};
+async function pull(){if(dirty)return push();setSync('','Sincronizando…');
+ try{const r=await fetch(SB+'/rest/v1/nutroten_progress?select=done&id=eq.'+TOKEN,{headers:H,cache:'no-store'});if(!r.ok)throw 0;
+  const j=await r.json();if(j.length){done=new Set(Object.keys(j[0].done||{}).filter(k=>j[0].done[k]&&all.some(a=>a.id===k)));saveLocal();render()}
+  else if(done.size){return push()}setSync('ok','✓ Sincronizado')}catch(e){setSync('off','Offline')}}
+document.addEventListener('visibilitychange',()=>{if(!document.hidden)pull()});addEventListener('focus',pull);addEventListener('online',pull);addEventListener('pageshow',e=>{if(e.persisted)pull()});
+const hms=s=>{s=Math.round(s);const h=Math.floor(s/3600),m=Math.round(s%3600/60);return h?`${h}h${String(m).padStart(2,'0')}`:`${m} min`};
+const mb=b=>(b/1048576).toFixed(0)+' MB';
+const pct=x=>(x*100).toFixed(1).replace('.',',')+'%';
+function donut(svg,parts,center){const r=62,c=2*Math.PI*r;let off=0,h=`<circle cx="85" cy="85" r="${r}" fill="none" stroke="var(--rest)" stroke-width="22"/>`;
+ const tot=parts.reduce((s,p)=>s+p.v,0)||1;parts.forEach(p=>{if(p.v<=0)return;const L=p.v/tot*c;h+=`<circle cx="85" cy="85" r="${r}" fill="none" stroke="${p.c}" stroke-width="22" stroke-dasharray="${L} ${c-L}" stroke-dashoffset="${-off}" transform="rotate(-90 85 85)"><title>${p.n}: ${pct(p.v/tot)}</title></circle>`;off+=L});
+ h+=`<text x="85" y="82" text-anchor="middle" font-size="22" font-weight="700" fill="var(--ink)">${center[0]}</text><text x="85" y="102" text-anchor="middle" font-size="11" fill="var(--mute)">${center[1]}</text>`;svg.innerHTML=h}
+function legend(el,parts,tot){el.innerHTML=parts.map(p=>`<div><span class="sw" style="background:${p.c}"></span>${p.n}<span style="margin-left:auto;color:var(--mute)">${pct(tot?p.v/tot:0)}</span></div>`).join('')}
+function render(){
+ const W=all.reduce((s,a)=>s+a.w,0),Wd=all.filter(a=>done.has(a.id)).reduce((s,a)=>s+a.w,0),n=all.filter(a=>done.has(a.id)).length;
+ const fonteTxt=useDur?'duração dos vídeos':useBy?'tamanho dos arquivos':'peso igual por aula';
+ document.getElementById('sub').textContent=`${all.length} aulas · ${mods.length} módulos · peso = ${fonteTxt}`;
+ let st=`<div class="stat"><b>${pct(Wd/W)}</b><span>progresso ponderado</span></div><div class="stat"><b>${n}/${all.length}</b><span>aulas (${pct(n/all.length)})</span></div>`;
+ if(useDur)st+=`<div class="stat"><b>${hms(Wd)}</b><span>de ${hms(W)} assistidas</span></div><div class="stat"><b>${hms(W-Wd)}</b><span>restantes</span></div>`;
+ else if(useBy)st+=`<div class="stat"><b>${mb(Wd)}</b><span>de ${mb(W)}</span></div>`;
+ st+=`<div class="stat"><b>${mods.filter(m=>m.aulas.every(a=>done.has(a.id))).length}/${mods.length}</b><span>módulos concluídos</span></div>`;
+ document.getElementById('stats').innerHTML=st;
+ const p1=[{n:'Assistido',v:Wd,c:'#14a37f'},{n:'Falta',v:W-Wd,c:'var(--rest)'}];donut(c1,p1,[pct(Wd/W).replace(/,\d%/,'%'),'assistido']);legend(l1,p1,W);
+ const p2=mods.map(m=>({n:m.nome,c:m.cor,v:m.aulas.filter(a=>done.has(a.id)).reduce((s,a)=>s+a.w,0)})).filter(p=>p.v>0);
+ donut(c2,p2,[String(n),'aulas vistas']);legend(l2,p2.length?p2:[{n:'Nada assistido ainda',v:0,c:'var(--rest)'}],Wd);
+ mods.forEach((m,i)=>{const mw=m.aulas.reduce((s,a)=>s+a.w,0),md=m.aulas.filter(a=>done.has(a.id)).reduce((s,a)=>s+a.w,0),mn=m.aulas.filter(a=>done.has(a.id)).length;
+  document.getElementById('mi'+i).textContent=`${mn}/${m.aulas.length} · ${pct(md/mw)}`;document.getElementById('mb'+i).style.width=(md/mw*100)+'%'});
+ all.forEach(a=>{const li=document.getElementById(a.id);li.classList.toggle('done',done.has(a.id));li.querySelector('input').checked=done.has(a.id)});
+}
+function build(){document.getElementById('list').innerHTML=mods.map((m,i)=>`<details class="mod" open><summary><div class="mh"><span>${m.nome}</span><small id="mi${i}"></small></div><div class="bar"><i id="mb${i}" style="background:${m.cor}"></i></div></summary><ul>${m.aulas.map(a=>`<li id="${a.id}"><label><input type="checkbox" data-id="${a.id}"><span class="t">${a.t}${a.est?'<span class="est">estimado</span>':''}</span><span class="w">${useDur?hms(a.w):useBy?mb(a.w):''}</span></label></li>`).join('')}</ul></details>`).join('');
+ document.getElementById('list').addEventListener('change',e=>{const id=e.target.dataset.id;if(!id)return;e.target.checked?done.add(id):done.delete(id);save();render()});
+ document.getElementById('foot').textContent=`Dados gerados em ${D.geradoEm}. O progresso sincroniza na nuvem entre seus aparelhos (com cópia local para uso offline). Exportar/Importar servem de backup.`}
+document.getElementById('exp').onclick=()=>{const b=new Blob([JSON.stringify({app:'nutroten',data:new Date().toISOString(),assistidas:[...done]},null,2)],{type:'application/json'});const u=URL.createObjectURL(b),a=document.createElement('a');a.href=u;a.download='progresso-nutroten.json';document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(u),1000)};
+document.getElementById('imp').onchange=e=>{const f=e.target.files[0];if(!f)return;f.text().then(t=>{const j=JSON.parse(t),ids=(j.assistidas||j).filter(x=>all.some(a=>a.id===x));done=new Set(ids);save();render();alert(ids.length+' aulas importadas.')}).catch(()=>alert('Arquivo inválido.'));e.target.value=''};
+document.getElementById('zero').onclick=()=>{if(confirm('Zerar todo o progresso?')){done.clear();save();render()}};
+document.getElementById('all').onclick=()=>{const d=[...document.querySelectorAll('details.mod')],o=!d.every(x=>x.open);d.forEach(x=>x.open=o)};
+build();render();pull();
+</script></body></html>
